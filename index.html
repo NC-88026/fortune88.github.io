@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harmony Horoscope & Zodiac Guide</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f4e8;
+            color: #5a4a3a;
+            text-align: center;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff9f0;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #b38a6d;
+        }
+        input {
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #d1c0a8;
+            border-radius: 5px;
+            width: 80%;
+        }
+        button {
+            background: #b38a6d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #9a755a;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0e6d6;
+            border-radius: 10px;
+            display: none;
+        }
+        .zodiac-icon {
+            font-size: 24px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Harmony Horoscope & Zodiac Guide</h1>
+        <p>Dear friend, enter your birthdate to uncover gentle insights from the stars and zodiac.</p>
+        
+        <input type="date" id="birthdate" required>
+        <button onclick="calculateLuck()">Discover Your Luck</button>
+        
+        <div id="result">
+            <p id="age"></p>
+            <p id="horoscope"></p>
+            <p id="zodiac"></p>
+            <p id="luck"></p>
+            <p class="zodiac-icon" id="zodiac-icon"></p>
+            <p><em>May your day be filled with serendipity.</em></p>
+        </div>
+    </div>
+
+    <script>
+        function calculateLuck() {
+            const birthdate = new Date(document.getElementById("birthdate").value);
+            const today = new Date();
+            
+            // Validate input
+            if (!birthdate.getTime()) {
+                alert("Please enter a valid date, dear friend.");
+                return;
+            }
+
+            // Calculate age
+            let age = today.getFullYear() - birthdate.getFullYear();
+            if (today.getMonth() < birthdate.getMonth() || 
+                (today.getMonth() === birthdate.getMonth() && today.getDate() < birthdate.getDate())) {
+                age--;
+            }
+            document.getElementById("age").innerHTML = `✨ You are <strong>${age}</strong> years young, with a heart full of wisdom.`;
+
+            // Western Horoscope
+            const horoscopes = [
+                { sign: "Capricorn", dates: "Dec 22 - Jan 19", luck: "Practical steps lead to small victories today." },
+                { sign: "Aquarius", dates: "Jan 20 - Feb 18", luck: "Embrace your uniqueness—it inspires others." },
+                { sign: "Pisces", dates: "Feb 19 - Mar 20", luck: "Trust your intuition; it gently guides you." },
+                { sign: "Aries", dates: "Mar 21 - Apr 19", luck: "Your energy attracts opportunities. Take the first step." },
+                { sign: "Taurus", dates: "Apr 20 - May 20", luck: "Slow down and savor life’s simple pleasures." },
+                { sign: "Gemini", dates: "May 21 - Jun 20", luck: "A curious mind brings joyful connections." },
+                { sign: "Cancer", dates: "Jun 21 - Jul 22", luck: "Nurture yourself as you do others." },
+                { sign: "Leo", dates: "Jul 23 - Aug 22", luck: "Your warmth brightens someone’s day today." },
+                { sign: "Virgo", dates: "Aug 23 - Sep 22", luck: "Details matter, but don’t forget to breathe." },
+                { sign: "Libra", dates: "Sep 23 - Oct 22", luck: "Seek balance, and harmony will follow." },
+                { sign: "Scorpio", dates: "Oct 23 - Nov 21", luck: "Your depth of feeling is a gift." },
+                { sign: "Sagittarius", dates: "Nov 22 - Dec 21", luck: "Adventure calls—even in small ways." }
+            ];
+            
+            const month = birthdate.getMonth() + 1;
+            const day = birthdate.getDate();
+            let horoscope;
+            
+            if ((month === 1 && day >= 20) || (month === 2 && day <= 18)) horoscope = horoscopes[1];
+            else if ((month === 2 && day >= 19) || (month === 3 && day <= 20)) horoscope = horoscopes[2];
+            else if ((month === 3 && day >= 21) || (month === 4 && day <= 19)) horoscope = horoscopes[3];
+            else if ((month === 4 && day >= 20) || (month === 5 && day <= 20)) horoscope = horoscopes[4];
+            else if ((month === 5 && day >= 21) || (month === 6 && day <= 20)) horoscope = horoscopes[5];
+            else if ((month === 6 && day >= 21) || (month === 7 && day <= 22)) horoscope = horoscopes[6];
+            else if ((month === 7 && day >= 23) || (month === 8 && day <= 22)) horoscope = horoscopes[7];
+            else if ((month === 8 && day >= 23) || (month === 9 && day <= 22)) horoscope = horoscopes[8];
+            else if ((month === 9 && day >= 23) || (month === 10 && day <= 22)) horoscope = horoscopes[9];
+            else if ((month === 10 && day >= 23) || (month === 11 && day <= 21)) horoscope = horoscopes[10];
+            else if ((month === 11 && day >= 22) || (month === 12 && day <= 21)) horoscope = horoscopes[11];
+            else horoscope = horoscopes[0];
+            
+            document.getElementById("horoscope").innerHTML = 
+                `🌿 As a <strong>${horoscope.sign}</strong>, the stars whisper: <em>${horoscope.luck}</em>`;
+
+            // Chinese Zodiac
+            const zodiacs = [
+                { animal: "Rat", years: [2020, 2008, 1996, 1984], luck: "Quick thinking opens doors today.", emoji: "🐀" },
+                { animal: "Ox", years: [2021, 2009, 1997, 1985], luck: "Steady effort brings quiet rewards.", emoji: "🐂" },
+                { animal: "Tiger", years: [2022, 2010, 1998, 1986], luck: "Courage leads to unexpected joy.", emoji: "🐅" },
+                { animal: "Rabbit", years: [2023, 2011, 1999, 1987], luck: "Gentleness is your strength today.", emoji: "🐇" },
+                { animal: "Dragon", years: [2012, 2000, 1988, 1976], luck: "Your fiery spirit inspires others.", emoji: "🐉" },
+                { animal: "Snake", years: [2013, 2001, 1989, 1977], luck: "Wisdom guides your choices.", emoji: "🐍" },
+                { animal: "Horse", years: [2014, 2002, 1990, 1978], luck: "Freedom fuels your happiness.", emoji: "🐎" },
+                { animal: "Goat", years: [2015, 2003, 1991, 1979], luck: "Creativity blooms in quiet moments.", emoji: "🐐" },
+                { animal: "Monkey", years: [2016, 2004, 1992, 1980], luck: "Playfulness lightens your day.", emoji: "🐒" },
+                { animal: "Rooster", years: [2017, 2005, 1993, 1981], luck: "Your confidence shines brightly.", emoji: "🐓" },
+                { animal: "Dog", years: [2018, 2006, 1994, 1982], luck: "Loyalty deepens connections.", emoji: "🐕" },
+                { animal: "Pig", years: [2019, 2007, 1995, 1983], luck: "Generosity returns to you tenfold.", emoji: "🐖" }
+            ];
+            
+            const year = birthdate.getFullYear();
+            const zodiac = zodiacs.find(z => z.years.includes(year));
+            
+            document.getElementById("zodiac").innerHTML = 
+                `🌸 Your <strong>${zodiac.animal}</strong> spirit (${zodiac.emoji}) reminds you: <em>${zodiac.luck}</em>`;
+            document.getElementById("zodiac-icon").innerHTML = zodiac.emoji;
+
+            // Show result
+            document.getElementById("result").style.display = "block";
+        }
+    </script>
+</body>
+</html>
