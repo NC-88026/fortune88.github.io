@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Harmony Horoscope & Zodiac Guide</title>
+    <title>每日运势指南</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Microsoft YaHei', sans-serif;
             background-color: #f9f4e8;
             color: #5a4a3a;
             text-align: center;
@@ -54,59 +54,112 @@
             font-size: 24px;
             margin: 10px;
         }
+        .date-display {
+            color: #8c7853;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Harmony Horoscope & Zodiac Guide</h1>
-        <p>Dear friend, enter your birthdate to uncover gentle insights from the stars and zodiac.</p>
+        <h1>每日运势指南</h1>
+        <p>亲爱的朋友，请输入您的出生日期，获取今日专属运势指引</p>
         
         <input type="date" id="birthdate" required>
-        <button onclick="calculateLuck()">Discover Your Luck</button>
+        <button onclick="calculateLuck()">查看今日运势</button>
         
         <div id="result">
+            <div class="date-display" id="today-date"></div>
             <p id="age"></p>
             <p id="horoscope"></p>
             <p id="zodiac"></p>
-            <p id="luck"></p>
+            <p id="daily-luck"></p>
             <p class="zodiac-icon" id="zodiac-icon"></p>
-            <p><em>May your day be filled with serendipity.</em></p>
+            <p><em>愿您今日顺遂如意</em></p>
         </div>
     </div>
 
     <script>
+        // 获取今天的日期并显示
+        function getTodayDate() {
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+            return now.toLocaleDateString('zh-CN', options);
+        }
+
+        // 根据日期生成每日不同的运势内容
+        function generateDailyLuck(sign, animal) {
+            const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24);
+            const luckIndex = Math.floor(dayOfYear % 5); // 5种不同的运势轮流
+            
+            const luckMessages = {
+                general: [
+                    "今日宜静心思考，可能会有意外收获。",
+                    "今天是行动的好日子，勇敢迈出第一步吧。",
+                    "注意人际关系，温和的沟通会带来好运。",
+                    "财运不错，但也要理性消费哦。",
+                    "适合学习新知识，提升自我的一天。"
+                ],
+                signSpecific: {
+                    "白羊座": ["今日充满活力", "注意控制脾气", "适合运动", "创意灵感丰富", "可能会遇到贵人"],
+                    "金牛座": ["财务方面有好消息", "享受美食的一天", "宜整理家居", "耐心会有回报", "适合投资自己"],
+                    // 其他星座的每日运势...
+                },
+                animalSpecific: {
+                    "鼠": ["机敏带来机会", "注意细节问题", "宜结交新朋友", "小心理财", "家庭运佳"],
+                    "牛": ["稳步前进", "健康运良好", "工作表现突出", "避免固执己见", "感情运上升"],
+                    // 其他生肖的每日运势...
+                }
+            };
+
+            // 组合通用运势和专属运势
+            const generalLuck = luckMessages.general[luckIndex];
+            const signLuck = luckMessages.signSpecific[sign] ? luckMessages.signSpecific[sign][luckIndex] : "";
+            const animalLuck = luckMessages.animalSpecific[animal] ? luckMessages.animalSpecific[animal][luckIndex] : "";
+            
+            return `
+                <p>${generalLuck}</p>
+                ${signLuck ? `<p>对${sign}的您：${signLuck}</p>` : ""}
+                ${animalLuck ? `<p>属${animal}的您：${animalLuck}</p>` : ""}
+            `;
+        }
+
         function calculateLuck() {
             const birthdate = new Date(document.getElementById("birthdate").value);
             const today = new Date();
             
-            // Validate input
+            // 验证输入
             if (!birthdate.getTime()) {
-                alert("Please enter a valid date, dear friend.");
+                alert("请输入有效的日期");
                 return;
             }
 
-            // Calculate age
+            // 显示今天的日期
+            document.getElementById("today-date").textContent = `今天是：${getTodayDate()}`;
+
+            // 计算年龄
             let age = today.getFullYear() - birthdate.getFullYear();
             if (today.getMonth() < birthdate.getMonth() || 
                 (today.getMonth() === birthdate.getMonth() && today.getDate() < birthdate.getDate())) {
                 age--;
             }
-            document.getElementById("age").innerHTML = `✨ You are <strong>${age}</strong> years young, with a heart full of wisdom.`;
+            document.getElementById("age").innerHTML = `✨ 您今年 <strong>${age}</strong> 岁，正值美好年华`;
 
-            // Western Horoscope
+            // 星座计算
             const horoscopes = [
-                { sign: "Capricorn", dates: "Dec 22 - Jan 19", luck: "Practical steps lead to small victories today." },
-                { sign: "Aquarius", dates: "Jan 20 - Feb 18", luck: "Embrace your uniqueness—it inspires others." },
-                { sign: "Pisces", dates: "Feb 19 - Mar 20", luck: "Trust your intuition; it gently guides you." },
-                { sign: "Aries", dates: "Mar 21 - Apr 19", luck: "Your energy attracts opportunities. Take the first step." },
-                { sign: "Taurus", dates: "Apr 20 - May 20", luck: "Slow down and savor life’s simple pleasures." },
-                { sign: "Gemini", dates: "May 21 - Jun 20", luck: "A curious mind brings joyful connections." },
-                { sign: "Cancer", dates: "Jun 21 - Jul 22", luck: "Nurture yourself as you do others." },
-                { sign: "Leo", dates: "Jul 23 - Aug 22", luck: "Your warmth brightens someone’s day today." },
-                { sign: "Virgo", dates: "Aug 23 - Sep 22", luck: "Details matter, but don’t forget to breathe." },
-                { sign: "Libra", dates: "Sep 23 - Oct 22", luck: "Seek balance, and harmony will follow." },
-                { sign: "Scorpio", dates: "Oct 23 - Nov 21", luck: "Your depth of feeling is a gift." },
-                { sign: "Sagittarius", dates: "Nov 22 - Dec 21", luck: "Adventure calls—even in small ways." }
+                { sign: "摩羯座", dates: "12月22日-1月19日" },
+                { sign: "水瓶座", dates: "1月20日-2月18日" },
+                { sign: "双鱼座", dates: "2月19日-3月20日" },
+                { sign: "白羊座", dates: "3月21日-4月19日" },
+                { sign: "金牛座", dates: "4月20日-5月20日" },
+                { sign: "双子座", dates: "5月21日-6月20日" },
+                { sign: "巨蟹座", dates: "6月21日-7月22日" },
+                { sign: "狮子座", dates: "7月23日-8月22日" },
+                { sign: "处女座", dates: "8月23日-9月22日" },
+                { sign: "天秤座", dates: "9月23日-10月22日" },
+                { sign: "天蝎座", dates: "10月23日-11月21日" },
+                { sign: "射手座", dates: "11月22日-12月21日" }
             ];
             
             const month = birthdate.getMonth() + 1;
@@ -127,32 +180,36 @@
             else horoscope = horoscopes[0];
             
             document.getElementById("horoscope").innerHTML = 
-                `🌿 As a <strong>${horoscope.sign}</strong>, the stars whisper: <em>${horoscope.luck}</em>`;
+                `🌿 您的星座是：<strong>${horoscope.sign}</strong> (${horoscope.dates})`;
 
-            // Chinese Zodiac
+            // 生肖计算
             const zodiacs = [
-                { animal: "Rat", years: [2020, 2008, 1996, 1984], luck: "Quick thinking opens doors today.", emoji: "🐀" },
-                { animal: "Ox", years: [2021, 2009, 1997, 1985], luck: "Steady effort brings quiet rewards.", emoji: "🐂" },
-                { animal: "Tiger", years: [2022, 2010, 1998, 1986], luck: "Courage leads to unexpected joy.", emoji: "🐅" },
-                { animal: "Rabbit", years: [2023, 2011, 1999, 1987], luck: "Gentleness is your strength today.", emoji: "🐇" },
-                { animal: "Dragon", years: [2012, 2000, 1988, 1976], luck: "Your fiery spirit inspires others.", emoji: "🐉" },
-                { animal: "Snake", years: [2013, 2001, 1989, 1977], luck: "Wisdom guides your choices.", emoji: "🐍" },
-                { animal: "Horse", years: [2014, 2002, 1990, 1978], luck: "Freedom fuels your happiness.", emoji: "🐎" },
-                { animal: "Goat", years: [2015, 2003, 1991, 1979], luck: "Creativity blooms in quiet moments.", emoji: "🐐" },
-                { animal: "Monkey", years: [2016, 2004, 1992, 1980], luck: "Playfulness lightens your day.", emoji: "🐒" },
-                { animal: "Rooster", years: [2017, 2005, 1993, 1981], luck: "Your confidence shines brightly.", emoji: "🐓" },
-                { animal: "Dog", years: [2018, 2006, 1994, 1982], luck: "Loyalty deepens connections.", emoji: "🐕" },
-                { animal: "Pig", years: [2019, 2007, 1995, 1983], luck: "Generosity returns to you tenfold.", emoji: "🐖" }
+                { animal: "鼠", years: [2020, 2008, 1996, 1984], emoji: "🐀" },
+                { animal: "牛", years: [2021, 2009, 1997, 1985], emoji: "🐂" },
+                { animal: "虎", years: [2022, 2010, 1998, 1986], emoji: "🐅" },
+                { animal: "兔", years: [2023, 2011, 1999, 1987], emoji: "🐇" },
+                { animal: "龙", years: [2012, 2000, 1988, 1976], emoji: "🐉" },
+                { animal: "蛇", years: [2013, 2001, 1989, 1977], emoji: "🐍" },
+                { animal: "马", years: [2014, 2002, 1990, 1978], emoji: "🐎" },
+                { animal: "羊", years: [2015, 2003, 1991, 1979], emoji: "🐐" },
+                { animal: "猴", years: [2016, 2004, 1992, 1980], emoji: "🐒" },
+                { animal: "鸡", years: [2017, 2005, 1993, 1981], emoji: "🐓" },
+                { animal: "狗", years: [2018, 2006, 1994, 1982], emoji: "🐕" },
+                { animal: "猪", years: [2019, 2007, 1995, 1983], emoji: "🐖" }
             ];
             
             const year = birthdate.getFullYear();
             const zodiac = zodiacs.find(z => z.years.includes(year));
             
             document.getElementById("zodiac").innerHTML = 
-                `🌸 Your <strong>${zodiac.animal}</strong> spirit (${zodiac.emoji}) reminds you: <em>${zodiac.luck}</em>`;
+                `🌸 您的生肖是：<strong>${zodiac.animal}</strong> ${zodiac.emoji}`;
             document.getElementById("zodiac-icon").innerHTML = zodiac.emoji;
 
-            // Show result
+            // 生成每日运势
+            document.getElementById("daily-luck").innerHTML = 
+                generateDailyLuck(horoscope.sign, zodiac.animal);
+
+            // 显示结果
             document.getElementById("result").style.display = "block";
         }
     </script>
